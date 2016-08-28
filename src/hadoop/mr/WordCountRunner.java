@@ -21,7 +21,7 @@ public class WordCountRunner {
         System.setProperty("HADOOP_USER_NAME", "cari");
         //实例化一个Job对象
         Configuration conf = new Configuration();
-        conf.addResource("hadoopMR.xml");
+      //  conf.addResource("hadoopMR.xml");
         Job job = Job.getInstance(conf);
         //设置job作业所做jar包
         job.setJarByClass(WordCountRunner.class);

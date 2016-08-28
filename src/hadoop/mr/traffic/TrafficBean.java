@@ -5,13 +5,14 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import org.apache.hadoop.io.Writable;
+import org.apache.hadoop.io.WritableComparable;
 
 /**
  * 
  * @author hzliyue1,2016年8月21日,下午5:01:53
  *
  */
-public class TrafficBean implements Writable {
+public class TrafficBean implements WritableComparable<TrafficBean> {
 
 	private long up_traffic;
 	private long down_traffic;
@@ -30,16 +31,20 @@ public class TrafficBean implements Writable {
 	/**
 	 * 
 	 */
-	public TrafficBean() {}
+	public TrafficBean() {
+	}
 
 	public void write(DataOutput out) throws IOException {
 		out.writeLong(up_traffic);
 		out.writeLong(down_traffic);
 		out.writeLong(sum_traffic);
-		// So, the flow sequence is: --> sum_traffic --> down_traffic -->up_traffic -->
+		// So, the flow sequence is: --> sum_traffic --> down_traffic
+		// -->up_traffic -->
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.apache.hadoop.io.Writable#readFields(java.io.DataInput)
 	 */
 	@Override
@@ -48,9 +53,8 @@ public class TrafficBean implements Writable {
 		up_traffic = in.readLong();
 		down_traffic = in.readLong();
 		sum_traffic = in.readLong();
-				
+
 	}
-	
 
 	/**
 	 * @return the up_traffic
@@ -72,8 +76,10 @@ public class TrafficBean implements Writable {
 	public long getSum_traffic() {
 		return sum_traffic;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -82,4 +88,14 @@ public class TrafficBean implements Writable {
 		return up_traffic + "\t" + down_traffic + "\t" + sum_traffic;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	@Override
+	public int compareTo(TrafficBean o) {
+		// TODO Auto-generated method stub
+		return this.sum_traffic > o.getSum_traffic() ? -1 : 1;
+	}
 }

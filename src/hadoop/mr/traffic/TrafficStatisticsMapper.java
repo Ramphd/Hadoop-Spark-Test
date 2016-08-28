@@ -23,9 +23,18 @@ public class TrafficStatisticsMapper extends Mapper<LongWritable, Text, Text, Tr
 	protected void map(LongWritable key, Text value,Context context)
 			throws IOException, InterruptedException {
 		// TODO Auto-generated method stub
+		//fetch a line content
 		String line = value.toString();
+		//split we need
 		String[] fields = StringUtils.split(line, '\t');
-		super.map(key, value, context);
+		//get num,up,down traffice
+		String telNumber = fields[1];
+		long up_traffic = Long.parseLong(fields[fields.length - 3]);
+		long down_traffic = Long.parseLong(fields[fields.length - 2]);
+		//load to TrafficBean
+		TrafficBean trafficBean = new TrafficBean(up_traffic,down_traffic);
+		//output telNum and trafficbean as Key-Value
+		context.write(new Text(telNumber), trafficBean);
 	}
 	
 	
